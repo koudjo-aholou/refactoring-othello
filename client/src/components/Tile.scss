@@ -1,0 +1,27 @@
+.reversi-tile{
+    background: green;
+    margin: 0.2rem;
+    width: 3rem;
+    height: 3rem;
+}
+
+.white{
+    background: white;
+    border-radius: 20rem;
+    width: 3rem;
+    height: 3rem;
+}
+
+.black{
+    background: black;
+    border-radius: 20rem;
+    width: 3rem;
+    height: 3rem;
+}
+
+.playable{
+    background: rgba(112, 2, 255, 0.274);
+    border-radius: 20rem;
+    width: 3rem;
+    height: 3rem;
+}
