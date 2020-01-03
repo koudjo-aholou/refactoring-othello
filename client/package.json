@@ -49,9 +49,12 @@
     "husky": "^3.1.0",
     "node-sass": "^4.13.0"
   },
-    "husky": {
-      "hooks": {
-        "pre-commit": "npm lint"
-      }
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
     }
+  },
+  "jest": {
+    "transformIgnorePatterns": ["node_modules/"]
+  }
 }

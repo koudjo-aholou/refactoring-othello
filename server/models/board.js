@@ -2,11 +2,20 @@ const mongoose = require('mongoose')
 
 const boardSchema = new mongoose.Schema({
   board: Array,
-  turn: 'string',
+  turn: String,
+  name: String,
   active: {
     type: Boolean,
     default: true
-  }
+  },
+  users: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  ],
+  blackscore: Number,
+  whitescore: Number
 })
 
 boardSchema.set('toJSON', {

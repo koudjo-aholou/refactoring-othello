@@ -1,14 +1,11 @@
 import React from 'react'
 import { render } from '@testing-library/react'
-import Case from '../components/Tile'
+import Tile from '../components/Tile'
+
 describe('renders correctly', () => {
-  test('should exist', () => {
-    const component = render(<Case />)
-    console.log('component', component)
-    expect(component).toBeTruthy()
-  })
-
-  test('should contain a "reversi case" node', () => {
-
+  test('should contain a tile node', () => {
+    const component = render(<Tile />)
+    const tile = component.container.querySelector('.reversi-tile')
+    expect(tile).toBeInTheDocument()
   })
 })
