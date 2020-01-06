@@ -14,11 +14,11 @@ Current port for the application to run correctly is set at 5000!
 example .env file:
 >MONGODB_URI=mongodb+srv://YOURMONGONAME:YOURMONGOPASSWORD@cluster0-sz2b9.gcp.mongodb.net/YOURPROJECTNAME?retryWrites=true&w=majority
 
->TEST_MONGODB_URI=mongodb+srv://MOMO:nId9u0ZHeB9GNlpV@cluster0-sz2b9.gcp.mongodb.net/YOURPROJECTNAME-test?retryWrites=true&w=majority
+>TEST_MONGODB_URI=mongodb+srv://YOURMONGONAME:YOURMONGOPASSWORD@cluster0-sz2b9.gcp.mongodb.net/YOURPROJECTNAME-test?retryWrites=true&w=majority
 
 >PORT=5000
 
->SECRET="very filling cherry cake"
+>SECRET="YOUR SECRETE PHRASE"
 
 
 ### `npm start`
