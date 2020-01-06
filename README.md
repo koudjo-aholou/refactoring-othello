@@ -16,7 +16,7 @@ example .env file:
 
 >TEST_MONGODB_URI=mongodb+srv://YOURMONGONAME:YOURMONGOPASSWORD@cluster0-sz2b9.gcp.mongodb.net/YOURPROJECTNAME-test?retryWrites=true&w=majority
 
->PORT=5000
+>PORT=9000
 
 >SECRET="YOUR SECRETE PHRASE"
 

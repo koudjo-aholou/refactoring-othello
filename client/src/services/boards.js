@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:5000/api/boards'
+const baseUrl = 'http://localhost:9000/api/boards'
 
 let token = null
 
