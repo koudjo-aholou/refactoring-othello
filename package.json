@@ -9,9 +9,7 @@
     "client": "npm run start --prefix client",
     "start": "concurrently \"cross-env NODE_ENV=production node index.js\" \"npm run client\"",
     "watch": "concurrently \"cross-env NODE_ENV=development nodemon index.js\" \"npm run client\"",
-    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
-    "coverage": "cross-env NODE_ENV=test jest",
-    "try": "cross-env NODE_ENV=production node index.js"
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
   },
   "keywords": [],
   "author": "",
