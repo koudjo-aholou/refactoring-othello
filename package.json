@@ -7,9 +7,9 @@
     "lint": "eslint .",
     "client-test": "npm run test --prefix client",
     "client": "npm run start --prefix client",
-    "start": "concurrently \"cross-env NODE_ENV=production node index.js\" \"npm run client\"",
+    "start": "cross-env NODE_ENV=production node index.js",
     "watch": "concurrently \"cross-env NODE_ENV=development nodemon index.js\" \"npm run client\"",
-    "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
   },
   "keywords": [],
   "author": "",
