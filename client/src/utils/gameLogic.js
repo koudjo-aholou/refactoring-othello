@@ -1,3 +1,4 @@
+// A tile can have four states : playable, empty, white, black. It starts empty.
 const tile = {
   state: 'empty'
 }
@@ -15,11 +16,13 @@ export const initializeBoard = () => {
   Board[3][4].state = 'black'
   Board[4][3].state = 'black'
   Board[4][4].state = 'white'
-  Board[3][2].state = 'playable'
-  Board[2][3].state = 'playable'
-  Board[4][5].state = 'playable'
-  Board[5][4].state = 'playable'
   return Board
+}
+
+export const filterTiles = (chosenState, Board) => {
+  const FilteredTiles = []
+  Board.map(row => row.map(tile => tile.state === chosenState ? FilteredTiles.push(tile) : null))
+  return FilteredTiles
 }
 
 const isUpperLeft = (rowIndex, columnIndex, Board) => Board[rowIndex - 1][columnIndex - 1]
@@ -32,12 +35,6 @@ const isLeft = (rowIndex, columnIndex, Board) => Board[rowIndex - 1][columnIndex
 const isRight = (rowIndex, columnIndex, Board) => Board[rowIndex + 1][columnIndex]
 
 const moves = [isUpperLeft, isUpperRight, isLowerLeft, isLowerRight, isLower, isUpper, isLeft, isRight]
-
-export const filterTiles = (chosenState, Board) => {
-  const FilteredTiles = []
-  Board.map(row => row.map(tile => tile.state === chosenState ? FilteredTiles.push(tile) : null))
-  return FilteredTiles
-}
 
 export const isPlayable = (tile, turn, Board) => {
   const { rowIndex, columnIndex } = tile
@@ -62,8 +59,8 @@ export const playableTiles = (turn, Board) => {
   const opposite = turn === 'black' ? 'white' : 'black'
   const playableTiles = []
   const Tiles = filterTiles(opposite, Board)
-  const playableTilesArray = Tiles.map(tile => isPlayable(tile, turn, Board))
-  playableTilesArray.map(arr => arr.map(tile => playableTiles.push(tile)))
+  const playableArrays = Tiles.map(tile => isPlayable(tile, turn, Board))
+  playableArrays.map(arr => arr.map(tile => playableTiles.push(tile)))
   const tilesToPlay = playableTiles.map(tile => {
     tile.state = 'playable'
     return tile

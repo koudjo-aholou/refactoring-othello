@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:9000/api/boards'
+const baseUrl = 'http://localhost:5000/api/boards'
 
 let token = null
 
@@ -16,7 +16,6 @@ const create = newObject => {
   const config = {
     headers: { Authorization: token }
   }
-  console.log('newObject', newObject)
   const response = axios.post(baseUrl, newObject, config)
   return response.then(response => response.data)
 }

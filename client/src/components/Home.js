@@ -1,5 +1,5 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useState, Fragment } from 'react'
+import React, { Fragment } from 'react'
+import PropTypes from 'prop-types'
 
 const Home = ({
   handleGameCreation,
@@ -10,54 +10,80 @@ const Home = ({
   loggedUser,
   allBoards,
   handleJoinGame,
-  changeBoardName
+  changeBoardName,
+  disconnect
 }) => {
-  // const [showRegister, setShowRegister] = useState(false)
-  // const [showLogin, setShowLogin] = useState(false)
-
   const registerForm = () => (
-    <form onSubmit={handleRegister}>
-      <div><input type="text" onChange={changeName}/></div>
-      <div><input type="password" onChange={changePassword}/></div>
-      <button type="submit" >Créer un compte</button>
-    </form>
+    <Fragment>
+      <form onSubmit={handleRegister} className="register-form">
+        <h2>Créer un compte</h2>
+        <div className="form-group">
+          <label htmlFor="username">Pseudonyme</label>
+          <input type="text" onChange={changeName} className="form-control"/>
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Mot de passe</label>
+          <input type="password" onChange={changePassword} className="form-control"/>
+        </div>
+        <button type="submit" className="btn btn-secondary" >Créer un compte</button>
+      </form>
+    </Fragment>
   )
 
   const loginForm = () => (
-    <React.Fragment>
-      <h2>Connexion</h2>
-
-      <form onSubmit={handleLogin}>
-        <div><label htmlFor="username">Pseudonyme</label><input type="text" name="username" title="Pseudonyme" onChange={changeName}/></div>
-        <div><label htmlFor="password">Mot de passe</label><input type="password" name="password" title="Password" onChange={changePassword} /></div>
-        <button type="submit">login</button>
+    <Fragment>
+      <form onSubmit={handleLogin} className="form-group connexion-form" >
+        <h2>Connexion</h2>
+        <div className="form-group">
+          <label htmlFor="username">Pseudonyme</label>
+          <input type="text" name="username" title="Pseudonyme" onChange={changeName} className="form-control"/>
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Mot de passe</label>
+          <input type="password" name="password" title="Password" onChange={changePassword} className="form-control" />
+        </div>
+        <button type="submit" className="btn btn-secondary">login</button>
       </form>
-    </React.Fragment>
+    </Fragment>
   )
 
   const activeBoards = () => {
     const activeBoards = allBoards.filter(board => board.active)
     return (activeBoards.map(board => (
-      <p key={board.id} >{board.name}
-        <button onClick={() => handleJoinGame(board.id)}>Rejoindre la partie</button></p>)))
+      <div className="active-game" key={board.id} ><div>
+        <div><span className="fat">Nom</span>: {board.name}</div>
+        <div><span className="fat">Créateur</span>: {board.users ? board.users[0].username : null} </div>
+        <div><span className="fat">Score</span> : {board.blackscore + board.whitescore ? `Score noir ${board.blackscore} VS Score blanc ${board.whitescore}` : 'Pas encore joué'}</div>
+        <div><span className="fat">État</span> : { board && board.users[1] ? 'Partie pleine' : 'Place disponible'}</div>
+      </div>
+      {board && board.users[1] && !board.users.find(user => user.id === loggedUser.id)
+        ? <button onClick={() => handleJoinGame(board.id)} className="btn btn-secondary">Regarder la partie</button>
+        : <button onClick={() => handleJoinGame(board.id)} className="btn btn-secondary">Rejoindre la partie</button>}
+
+      </div>)))
   }
 
   if (loggedUser) {
     return (
-      <div style={{ textAlign: 'center', margin: '30vh auto', width: '70%' }}>
+      <main className="main-home">
         <h1 role="welcome">Bienvenue {loggedUser.username} !</h1>
-        <input type="text" placeholder="Nom de la partie" onChange={changeBoardName}></input>
-        <button onClick={() => handleGameCreation()}>Créer une partie</button>
+        <div className="form-group">
+
+          <input type="text" placeholder="Nom de la partie" onChange={changeBoardName} className="form-control"></input>
+          <button onClick={() => handleGameCreation()} className="btn btn-secondary">Créer une partie</button>
+          <button className="btn btn-danger" onClick={disconnect}>Se déconnecter</button>
+        </div>
+        <h3>Parties en cours</h3>
         {activeBoards()}
-      </div>
+      </main>
     )
   } else {
     return (
-      <Fragment>
+      <main className="main-home">
         <h1>React Reversi Game</h1>
         {registerForm()}
         {loginForm()}
-      </Fragment>
+      </main>
     )
   }
 }
@@ -65,5 +91,14 @@ const Home = ({
 export default Home
 
 Home.propTypes = {
-
+  handleGameCreation: PropTypes.func,
+  changeName: PropTypes.func,
+  changePassword: PropTypes.func,
+  handleLogin: PropTypes.func,
+  handleRegister: PropTypes.func,
+  loggedUser: PropTypes.func,
+  allBoards: PropTypes.func,
+  handleJoinGame: PropTypes.func,
+  changeBoardName: PropTypes.func,
+  disconnect: PropTypes.func
 }

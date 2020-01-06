@@ -3,10 +3,11 @@ import Board from './components/Board'
 import Home from './components/Home'
 import BoardService from './services/boards'
 import UserService from './services/users'
+import io from 'socket.io-client'
 import LoginService from './services/login'
 import { initializeBoard } from './utils/gameLogic'
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Route,
   Redirect
 } from 'react-router-dom'
@@ -19,17 +20,13 @@ const App = () => {
   const [boardName, setBoardName] = useState('')
   const [password, setPassword] = useState('')
   const [boardToJoin, setBoardToJoin] = useState([])
+  const [socket] = useState(io('http://localhost:5000'))
 
   useEffect(() => {
-    // BoardService.getAll().then(data => localStorage.setItem('boards', JSON.stringify(data)))
     BoardService.getAll().then(data => setAllBoards(data))
     setLoggedUser(JSON.parse(localStorage.getItem('user')))
   }, [])
 
-  // const boardById = (id) => {
-  //   const localboards = JSON.parse(localStorage.getItem('boards'))
-  //   return localboards.find(board => board.id === id)
-  // }
   const boardById = (id) => allBoards.find(board => board.id === id)
 
   const handleRegister = (e) => {
@@ -41,23 +38,25 @@ const App = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault()
-    const user = await LoginService.login({
-      username, password
-    })
-    localStorage.setItem('user', JSON.stringify(user))
-    setLoggedUser(user)
-    setTimeout(() => {
-      setUsername('')
-      setPassword('')
-    }, 200)
+    try {
+      const user = await LoginService.login({
+        username, password
+      })
+      localStorage.setItem('user', JSON.stringify(user))
+      setLoggedUser(user)
+      setTimeout(() => {
+        setUsername('')
+        setPassword('')
+      }, 200)
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
   const handleGameCreation = async () => {
     BoardService.setToken(loggedUser.token)
     const data = await BoardService.create({ board: initializeBoard(), name: boardName })
     setBoardToJoin(data)
-    // const localboards = JSON.parse(localStorage.getItem('boards'))
-    // localStorage.setItem('boards', JSON.stringify(localboards.concat(data)))
     setAllBoards(allBoards.concat(data))
     setTimeout(() => {
       setGame(true)
@@ -71,6 +70,11 @@ const App = () => {
     setTimeout(() => {
       setGame(true)
     }, (500))
+  }
+
+  const handleDisconnect = () => {
+    localStorage.setItem('user', JSON.stringify(''))
+    setLoggedUser('')
   }
 
   return (
@@ -87,15 +91,12 @@ const App = () => {
           changeBoardName={({ target }) => setBoardName(target.value)}
           changeName={({ target }) => setUsername(target.value)}
           handleJoinGame={handleJoinGame}
-          changePassword={({ target }) => setPassword(target.value)} />}
+          changePassword={({ target }) => setPassword(target.value)}
+          disconnect={handleDisconnect}
+        />}
         />
 
-        <Route exact path="/game/:id" render={({ match }) => {
-          console.log('boardById', boardById(match.params.id))
-          return (
-            <Board board={boardById(match.params.id)} />
-          )
-        }
+        <Route exact path="/game/:id" render={({ match }) => <Board board={boardById(match.params.id)} socket={socket} />
         } />
 
       </div>
