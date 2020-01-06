@@ -21,7 +21,10 @@ example .env file:
 >SECRET="YOUR SECRETE PHRASE"
 
 
-### `npm start`
+## `npm start` - Starting the application
+
+/!\ If needed, build the application by running "npm run build" inside the client. Then, put the newly created build folder (inside client) into the root folder. /!\ 
+
 Runs the backend api as well as the react app in the "client" folder. 
 
 
