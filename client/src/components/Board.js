@@ -65,7 +65,7 @@ const Board = ({ board, socket }) => {
     setLoggedUser(JSON.parse(localStorage.getItem('user')))
   }, [board, message, turn, blackCount])
 
-  // if winner, reset all tiles
+  // if winner, reset all tiles in case the board is not full
   if (winner) {
     const winnerBoard = [...Board]
     const tilesToReset = resetPlayable(winnerBoard)
@@ -101,6 +101,7 @@ const Board = ({ board, socket }) => {
     tilesToReset.map(tile => {
       newBoard[tile.rowIndex][tile.columnIndex] = tile
     })
+    setMessage('')
 
     updateBoard(newBoard)
   }
@@ -136,7 +137,7 @@ const Board = ({ board, socket }) => {
     updateBoard(passBoard)
   }
 
-  const displayMessage = (message) => (<div className="alert alert-primary" role="alert">{message} <svg onClick={() => setMessage(false)} className="bi bi-x-square" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  const displayMessage = (message) => (<div className="alert alert-secondary" role="alert">{message} <svg onClick={() => setMessage(false)} className="bi bi-x-square" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
     <path fillRule="evenodd" d="M16 3H4a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V4a1 1 0 00-1-1zM4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4z" clipRule="evenodd"></path>
     <path fillRule="evenodd" d="M9.293 10L6.646 7.354l.708-.708L10 9.293l2.646-2.647.708.708L10.707 10l2.647 2.646-.708.708L10 10.707l-2.646 2.647-.708-.707L9.293 10z" clipRule="evenodd" ></path>
   </svg>
@@ -159,12 +160,12 @@ const Board = ({ board, socket }) => {
   }
 
   const displayTurn = (users) => {
-    if (users && users[0] && turn === 'black' ) {
-      return (<h3 className="reversi-board">C'est le tour de {users[0].username} de jouer !</h3>)
+    if (users && users[0] && turn === 'black') {
+      return (<h3 className="reversi-board">C`&apos;`est le tour de {users[0].username} de jouer !</h3>)
     } else if (users && users[1] && turn === 'white') {
-      return (<h3 className="reversi-board">C'est le tour de {users[1].username} de jouer !</h3>)
+      return (<h3 className="reversi-board">C`&apos;`est le tour de {users[1].username} de jouer !</h3>)
     }
-    return (<h3 className="reversi-board">C'est le tour de {turn} de jouer !</h3>)
+    return (<h3 className="reversi-board">C`&apos;`est le tour de {turn} de jouer !</h3>)
   }
 
   return (
