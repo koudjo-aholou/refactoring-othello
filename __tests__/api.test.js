@@ -66,7 +66,6 @@ describe('CRUD USER', () => {
 
   test('should be two users in DB', async () => {
     const response = await api.get('/api/users')
-
     expect(response.body.length).toEqual(initialUsers.length)
   })
 

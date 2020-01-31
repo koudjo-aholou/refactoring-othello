@@ -11,8 +11,6 @@ Environment variables should be placed in a .env file at the project's root. It 
 
 Current port for the application to run correctly is set at 5000!
 
-> INSTALL  GLOBAL cross-env
-npm i -g cross-env
 
 example .env file:
 >MONGODB_URI=mongodb+srv://YOURMONGONAME:YOURMONGOPASSWORD@cluster0-sz2b9.gcp.mongodb.net/YOURPROJECTNAME?retryWrites=true&w=majority
