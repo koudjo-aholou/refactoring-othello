@@ -21,6 +21,8 @@ const userSchema = mongoose.Schema({
 
 userSchema.plugin(uniqueValidator)
 
+// returnedObject creer une nouvelle propriété dans l objet nommée id  et conversion de l id en string
+// obliger de convertir car find ne marche pas sur un object id qui n est pas une string
 userSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString()

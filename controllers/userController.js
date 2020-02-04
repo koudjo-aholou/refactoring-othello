@@ -46,6 +46,7 @@ exports.create = async (req, res, next) => {
 }
 
 exports.update = async (req, res, next) => {
+  // Rajoute un utilisateur dans le modele board ou rajoute board dans le modele User
   try {
     const boardToUpdate = await Board.findById(req.body.board)
     const userToUpdate = await User.findById(req.params.id)

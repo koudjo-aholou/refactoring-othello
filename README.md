@@ -28,6 +28,8 @@ example .env file:
 
 Runs the backend api as well as the react app in the "client" folder. 
 
+## bug cross-env
+Reinstall cross-env : npm install -D cross-env
 
 ## `Play the game`
 
