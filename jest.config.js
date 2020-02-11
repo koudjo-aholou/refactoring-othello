@@ -1,4 +1,5 @@
 module.exports = {
   testEnvironment: 'node',
-  testPathIgnorePatterns: ['client']
+  testPathIgnorePatterns: ['client'],
+  testTimeout: 30000
 }
