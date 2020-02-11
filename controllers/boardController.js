@@ -56,7 +56,6 @@ exports.create = async (req, res, next) => {
 }
 
 exports.update = async (req, res, next) => {
-  console.log("EHEHH==========================______________________________")
   Board.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(updatedBoard => {
       console.log(updatedBoard, 'updateBoard========')
@@ -79,7 +78,6 @@ exports.update = async (req, res, next) => {
 
   // try empechait la condition de s executer
   try {
-    
     const boardToUpdate = await Board.findById(req.params.id)
     const user = await User.findById(decodedToken.id)
     console.log(user, "user ===========")
