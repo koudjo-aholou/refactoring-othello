@@ -81,6 +81,7 @@ const Board = ({ board, socket }) => {
     const updatedBoard = { board: newBoard, turn: newTurn, blackscore: filterTiles('black', newBoard).length, whitescore: filterTiles('white', newBoard).length }
     try {
       const data = await BoardService.update(board.id, updatedBoard)
+      console.log(data, 'new data ======')
       setBoard(data.board)
       setBlackCount(data.blackscore)
       setWhiteCount(data.whitescore)

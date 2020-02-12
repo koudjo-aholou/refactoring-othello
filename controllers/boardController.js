@@ -58,7 +58,6 @@ exports.create = async (req, res, next) => {
 exports.update = async (req, res, next) => {
   Board.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(updatedBoard => {
-      console.log(updatedBoard, 'updateBoard========')
       res.json(updatedBoard.toJSON())
     })
     .catch(error => next(error))
@@ -80,7 +79,7 @@ exports.update = async (req, res, next) => {
   try {
     const boardToUpdate = await Board.findById(req.params.id)
     const user = await User.findById(decodedToken.id)
-    console.log(user, "user ===========")
+  //  console.log(user, "user ===========")
     if (user === null || !boardToUpdate.users.includes(user._id)) {
 
       return res.status(401).json({ error: "Vous n'avez pas le droit de jouer sur cette partie." })

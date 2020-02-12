@@ -4,6 +4,7 @@ const app = require('../app')
 const api = supertest(app)
 const User = require('../models/user')
 const Board = require('../models/board')
+const updateBoardWithMe = require('../utils/updateBoard')
 
 const initialUsers = [
   {
@@ -329,13 +330,78 @@ describe('CRUD BOARD', () => {
   })
 })
 
-describe('New USER Can subscribe and play', () => { 
-  // user subscribe
-  // user  name a game and create it
+describe('New USER Can subscribe and play || User can join a Game and play', () => { 
+  test('Create a user then login then create a board then play with this board and Wait White', async () => { 
+    // user subscribe
+
+    const newUser = {
+      username: 'UserSubscribe',
+      password: 'user'
+    }
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(200)
+
+    const credentials = { username: newUser.username, password: newUser.password }
+
+    const res = await api
+      .post('/api/login')
+      .send(credentials)
+      .expect(200)
+
+    const idOfThisUser = res.body.id
+    // user  name a game and create it
+    const newBoard = {
+      board: [[], [], []],
+      active: true,
+      name: 'newBoard-UserSubscribe'
+    }
+
+    const respAddBoard = await api
+      .post('/api/boards')
+      .set('Authorization', 'Bearer ' + res.body.token)
+      .send(newBoard)
+      .expect(200)
+      
+      expect(respAddBoard.body.name).toEqual(newBoard.name)
+
+      const IdBoardGame = respAddBoard.body.id
+
+    // user join its game
+      const resultBoard = await api
+        .get(`/api/boards/${IdBoardGame}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      expect(resultBoard.body.id).toEqual(IdBoardGame)
+      expect(resultBoard.body.turn).toEqual("black")
+
+    // user can modify the board 
+    let updateBoardMove = {...respAddBoard.body}
+    updateBoardMove.board = updateBoardWithMe.board;
+
+    const updateBoard =  await api
+      .put(`/api/boards/${IdBoardGame}`)
+      .set('Authorization', 'Bearer ' + res.body.token)
+      .send(updateBoardMove)
+      .expect(200)
+
+      expect(updateBoard.body).toEqual(updateBoardMove)
+      // waiting Player Two
+      const usersLength = updateBoard.body.users.length
+      expect(usersLength).toEqual(1)
+      expect(updateBoard.body.users[0]).toEqual(idOfThisUser)
+  })
+})
+
+describe('USER2 Can join a Game and play', () => { 
+  console.log(usersInDB, "user in DB =========")
+  // user log
   // user join a game
   // user can modify the board 
-  // score change
-  // waiting Player Two
+  // score change or not
+  // waiting Player One
 })
 
 afterAll(() => {
