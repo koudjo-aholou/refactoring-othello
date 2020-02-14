@@ -331,19 +331,20 @@ describe('CRUD BOARD', () => {
 })
 
 describe('New USER Can subscribe and play || User can join a Game and play', () => { 
+
+  const userOneBlack = {
+    username: 'UserSubscribe',
+    password: 'user'
+  }
   test('Create a user then login then create a board then play with this board and Wait White', async () => { 
     // user subscribe
 
-    const newUser = {
-      username: 'UserSubscribe',
-      password: 'user'
-    }
     await api
       .post('/api/users')
-      .send(newUser)
+      .send(userOneBlack)
       .expect(200)
 
-    const credentials = { username: newUser.username, password: newUser.password }
+    const credentials = { username: userOneBlack.username, password: userOneBlack.password }
 
     const res = await api
       .post('/api/login')
@@ -392,12 +393,51 @@ describe('New USER Can subscribe and play || User can join a Game and play', () 
       const usersLength = updateBoard.body.users.length
       expect(usersLength).toEqual(1)
       expect(updateBoard.body.users[0]).toEqual(idOfThisUser)
+
+      const userWhite = {
+        username: 'UserWhite',
+        password: 'user'
+      }
+  
+      await api
+        .post('/api/users')
+        .send(userWhite)
+        .expect(200)
+  
+      const credentialsTwo = { username: userWhite.username, password: userWhite.password }
+  
+      const resTwo = await api
+        .post('/api/login')
+        .send(credentialsTwo)
+        .expect(200)
+    
+      expect(resTwo.body.username).toEqual(credentialsTwo.username)
+      const AddBoardId = {board : respAddBoard.body.id}
+      const idPlayerTwo = resTwo.body.id
+
+      // user join its game
+      const addPlayerTwoBoard = await api
+      .put(`/api/users/${idPlayerTwo}`)
+      .send(AddBoardId)
+      .expect(200)
+
+  //    console.log(addPlayerTwoBoard, "here ===============");
+
+      // const resultPlayertwoCanPlayBoard = await api
+      // .get(`/api/boards/${AddBoardId}`)
+      // .expect(200)
+      // .expect('Content-Type', /application\/json/)
+
+      // expect(resultPlayertwoCanPlayBoard.users).toEqual(idPlayerTwo)
+      
   })
 })
 
-describe('USER2 Can join a Game and play', () => { 
-  console.log(usersInDB, "user in DB =========")
-  // user log
+describe('USER2 Can join a Game create by a userOneBlack and can play with userOneBlack', () => { 
+
+  test('Log user White && join specific game', async () => {
+   
+ })
   // user join a game
   // user can modify the board 
   // score change or not
