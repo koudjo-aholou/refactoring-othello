@@ -4,7 +4,7 @@ const app = require('../app')
 const api = supertest(app)
 const User = require('../models/user')
 const Board = require('../models/board')
-const updateBoardWithMe = require('../utils/updateBoard')
+const updateBoard = require('../utils/updateBoard')
 
 const initialPlayers = [
   {
@@ -34,7 +34,9 @@ let respBoardCreateByPlayer;
 let IdBoardGame;
 let respPLayerJoinBoard;
 let updateBoardMove;
-let updateBoardPlayer;
+let respUpdateBoardPlayerOneMove;
+let addPlayerTwoBoard;
+let updateBoardMovePlayerTwo;
 
 beforeEach(async () => {
  await api
@@ -67,16 +69,29 @@ beforeEach(async () => {
   .get(`/api/boards/${IdBoardGame}`)
 
   updateBoardMove = {...respBoardCreateByPlayer.body}
-  updateBoardMove.board = updateBoardWithMe.board;
+  updateBoardMove.board = updateBoard.byPlayerOne.board;
+  updateBoardMove.turn = "white"
 
-  updateBoardPlayer =  await api
+  respUpdateBoardPlayerOneMove =  await api
     .put(`/api/boards/${IdBoardGame}`)
     .set('Authorization', 'Bearer ' + playerOne.token)
     .send(updateBoardMove)
+  
+  const data = {board : IdBoardGame}
+ 
+   addPlayerTwoBoard = await api
+    .put(`/api/users/${playerTwo.id}`)
+    .send(data)
+
+  updateBoardMovePlayerTwo = {...respBoardCreateByPlayer.body}
+  updateBoardMovePlayerTwo.board = updateBoard.byPlayerTwo.board
+  updateBoardMovePlayerTwo.turn = "black"
+  updateBoardMovePlayerTwo.blackscore = 3
+  updateBoardMovePlayerTwo.whitescore = 3
 })
 
-
 describe('GAME', () => { 
+
   describe('Players Have to sign and be logged', () => {
     test('Players One create an account and logged', async () => {
       expect(responsePlayerOne.status).toEqual(200)  
@@ -88,6 +103,7 @@ describe('GAME', () => {
       expect(playerTwo.username).toEqual(initialPlayers[1].username)
     })
   })
+
   describe('Player One logged and Create a Game', () => {
     test('Player One creates a game and write a title', async () => {
       expect(respBoardCreateByPlayer.status).toEqual(200) 
@@ -98,31 +114,75 @@ describe('GAME', () => {
       const resultplayerOne = await api
       .get(`/api/users/${playerOne.id}`)
       .expect(200)
-     // console.log(resultplayerOne.body.boards[3], respPLayerJoinBoard.body.id, "============================ ))))))))")
+
       expect(respPLayerJoinBoard.status).toEqual(200)
-      expect(respPLayerJoinBoard.body.id).toEqual(resultplayerOne.body.boards[3])
+      expect(respPLayerJoinBoard.body.id).toContain(resultplayerOne.body.boards[3])
     })
   })
 
   describe('Player One can make a move and wait Player two \'s Move', () => {
     test('Player One has to play first',  () => {
+      expect(respPLayerJoinBoard.status).toEqual(200)
       expect(respPLayerJoinBoard.body.turn).toEqual("black")
     })
 
     test('Player One move have been saved', () => {
-        expect(updateBoardPlayer.status).toEqual(200)
-        expect(updateBoardPlayer.body).toEqual(updateBoardMove)
+        expect(respUpdateBoardPlayerOneMove.status).toEqual(200)
+        expect(respUpdateBoardPlayerOneMove.body).toEqual(updateBoardMove)
     })
 
   })
 
   describe('Player two can make a move and wait Player One \'s Move', () => {
-    test('Player Two has to play',  () => {
-      expect(updateBoardPlayer.body.turn).toEqual("black")
+    test('Player two joins the game', () => {
+      expect(addPlayerTwoBoard.status).toEqual(200)
     })
 
-    test('Player Two move have been saved', () => {
+    test('Player two is allowed to play in the game', async () => {
 
+      const resultPlayertwoCanPlayBoard = await api
+      .get(`/api/boards/${IdBoardGame}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+      const playerWhiteId = resultPlayertwoCanPlayBoard.body.users[1].id
+     expect(playerWhiteId).toEqual(playerTwo.id)
+    })
+
+    test('Player Two has to play',  () => {
+      expect(respUpdateBoardPlayerOneMove.body.turn).toEqual("white")
+    })
+
+    test('Player Two move have been saved', async () => {
+      const respUpdateBoardPlayerTwoMove =  await api
+       .put(`/api/boards/${IdBoardGame}`)
+       .set('Authorization', 'Bearer ' + playerTwo.token)
+       .send(updateBoardMovePlayerTwo)
+
+      expect(respUpdateBoardPlayerTwoMove.body.turn).toEqual('black')
+    })
   })
+
+  describe('Score have been saved after a player \'s Move', () => {
+    test('Player one score have been saved', () => {
+      expect(respUpdateBoardPlayerOneMove.body.whitescore).toEqual(updateBoardMove.whitescore)
+      expect(respUpdateBoardPlayerOneMove.body.blackscore).toEqual(updateBoardMove.blackscore)
+
+    })
+
+    test('Player two score have been saved', async () => {
+      const respUpdateBoardPlayerTwoMove =  await api
+      .put(`/api/boards/${IdBoardGame}`)
+      .set('Authorization', 'Bearer ' + playerTwo.token)
+      .send(updateBoardMovePlayerTwo)
+  
+      expect(respUpdateBoardPlayerTwoMove.body.whitescore).toEqual(updateBoardMovePlayerTwo.whitescore)
+      expect(respUpdateBoardPlayerTwoMove.body.blackscore).toEqual(updateBoardMovePlayerTwo.blackscore)
+    })
   })
+})
+
+
+afterAll(() => {
+  mongoose.connection.close()
 })
