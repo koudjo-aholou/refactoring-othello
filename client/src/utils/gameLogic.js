@@ -50,7 +50,7 @@ export const isPlayable = (tile, turn, Board) => {
           playableTiles.push(tileAround)
         }
       }
-    } catch (e) { }
+    } catch (e) { console.log('error', e) }
   })
   return playableTiles
 }
@@ -93,7 +93,7 @@ export const makeMove = (rowIndex, columnIndex, turn, Board) => {
           tilesToChange = tilesToChange.concat(possibleTiles)
         }
       }
-    } catch (e) { }
+    } catch (e) { console.log('error', e) }
   })
   tilesToChange.map(tile => {
     tile.state = turn

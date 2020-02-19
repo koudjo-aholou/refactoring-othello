@@ -2,7 +2,7 @@
 
 const info = (...params) => {
   if (process.env.NODE_ENV !== 'test') {
-    console.log(...params, "parametre info ds logger ")
+    console.log(...params, 'parametre info ds logger ')
   }
 }
 

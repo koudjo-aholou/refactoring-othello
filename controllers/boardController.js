@@ -65,23 +65,20 @@ exports.update = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
   const token = getTokenFrom(req)
-  const decodedToken = jwt.verify(token, process.env.SECRET, function(err, decoded) {
-    if(err){
+  const decodedToken = jwt.verify(token, process.env.SECRET, function (err, decoded) {
+    if (err) {
       return res.status(401).json({ error: "Votre token d'authentification est manquant. Veuillez vous reconnecter." })
-    }
-    else{
+    } else {
       return decoded
     }
-  });
-
+  })
 
   // try empechait la condition de s executer
   try {
     const boardToUpdate = await Board.findById(req.params.id)
     const user = await User.findById(decodedToken.id)
-  //  console.log(user, "user ===========")
+    //  console.log(user, "user ===========")
     if (user === null || !boardToUpdate.users.includes(user._id)) {
-
       return res.status(401).json({ error: "Vous n'avez pas le droit de jouer sur cette partie." })
     }
     const updatedBoard = await Board.findByIdAndUpdate(req.params.id, req.body, { new: true })

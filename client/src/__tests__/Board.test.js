@@ -9,7 +9,7 @@ describe('renders correctly', () => {
       const board = component.container.querySelector('.reversi-board')
       expect(board).toBeInTheDocument()
     } catch (e) {
-
+      console.log('error', e)
     }
   })
 
@@ -19,7 +19,7 @@ describe('renders correctly', () => {
       const linkElement = getByText(/score/i)
       expect(linkElement).toBeInTheDocument()
     } catch (e) {
-
+      console.log('error', e)
     }
   })
 
@@ -29,6 +29,7 @@ describe('renders correctly', () => {
       const linkElement = getByText(/turn to play/i)
       expect(linkElement).toBeInTheDocument()
     } catch (e) {
+      console.log('error', e)
     }
   })
 })

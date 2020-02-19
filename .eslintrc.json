@@ -6,7 +6,9 @@
         "jest": true
     },
     "extends": [
-        "standard"
+        "standard",
+        "eslint:recommended",
+        "plugin:react/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -16,6 +18,14 @@
         "ecmaVersion": 2018
     },
     "rules": {
+    },
+    "plugins": [
+        "react"
+    ],
+    "settings": {
+        "react": {
+          "version": "latest"
+        }
     },
     "ignorePatterns": ["node_modules", "build"]
 }

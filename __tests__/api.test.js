@@ -62,7 +62,7 @@ describe('CRUD USER', () => {
       .get('/api/users')
       .expect(200)
       .expect('Content-Type', /application\/json/)
-      done()
+    done()
   })
 
   test('should be two users in DB', async done => {
@@ -156,7 +156,7 @@ describe('CRUD USER', () => {
       .post('/api/login')
       .send(credentials)
       .expect(200)
-      done()
+    done()
   })
 
   test('should get 401 when entering wrong credentials', async done => {
