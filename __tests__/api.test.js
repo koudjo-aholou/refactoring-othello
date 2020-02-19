@@ -4,7 +4,6 @@ const app = require('../app')
 const api = supertest(app)
 const User = require('../models/user')
 const Board = require('../models/board')
-const updateBoardWithMe = require('../utils/updateBoard')
 
 const initialUsers = [
   {
