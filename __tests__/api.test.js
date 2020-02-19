@@ -57,19 +57,21 @@ beforeEach(async () => {
 })
 
 describe('CRUD USER', () => {
-  test('users are returned as json', async () => {
+  test('users are returned as json', async done => {
     await api
       .get('/api/users')
       .expect(200)
       .expect('Content-Type', /application\/json/)
+      done()
   })
 
-  test('should be two users in DB', async () => {
+  test('should be two users in DB', async done => {
     const response = await api.get('/api/users')
     expect(response.body.length).toEqual(initialUsers.length)
+    done()
   })
 
-  test('should view a specific user', async () => {
+  test('should view a specific user', async done => {
     const users = await usersInDB()
 
     const norbert = users[0]
@@ -80,8 +82,10 @@ describe('CRUD USER', () => {
       .expect('Content-Type', /application\/json/)
 
     expect(resultNorbert.body).toEqual(norbert)
+    done()
   })
-  test('should be able to add an user', async () => {
+
+  test('should be able to add an user', async done => {
     const usersBeforeRequest = await usersInDB()
 
     const newUser = {
@@ -100,9 +104,10 @@ describe('CRUD USER', () => {
 
     const usernames = usersAfterRequest.map(n => n.username)
     expect(usernames).toContain('firmin')
+    done()
   })
 
-  test('should only update user to add boards ie. join rooms', async () => {
+  test('should only update user to add boards ie. join rooms', async done => {
     const usersBeforeRequest = await usersInDB()
 
     const updatedUser = { ...usersBeforeRequest[0], username: 'updatedUser' }
@@ -111,9 +116,10 @@ describe('CRUD USER', () => {
       .put(`/api/users/${updatedUser.id}`)
       .send(updatedUser)
       .expect(500)
+    done()
   })
 
-  test('should be able to delete a user', async () => {
+  test('should be able to delete a user', async done => {
     const usersBeforeRequest = await usersInDB()
     const userToDelete = usersBeforeRequest[0]
 
@@ -130,9 +136,10 @@ describe('CRUD USER', () => {
     const usernames = usersAfterRequest.map(r => r.username)
 
     expect(usernames).not.toContain(userToDelete.username)
+    done()
   })
 
-  test('should be able to login', async () => {
+  test('should be able to login', async done => {
     const newUser = {
       username: 'firmin',
       password: 'firmin'
@@ -149,9 +156,10 @@ describe('CRUD USER', () => {
       .post('/api/login')
       .send(credentials)
       .expect(200)
+      done()
   })
 
-  test('should get 401 when entering wrong credentials', async () => {
+  test('should get 401 when entering wrong credentials', async done => {
     const newUser = {
       username: 'firmin',
       password: 'firmin'
@@ -168,24 +176,27 @@ describe('CRUD USER', () => {
       .post('/api/login')
       .send(credentials)
       .expect(401)
+    done()
   })
 })
 
 describe('CRUD BOARD', () => {
-  test('boards are returned as json', async () => {
+  test('boards are returned as json', async done => {
     await api
       .get('/api/boards')
       .expect(200)
       .expect('Content-Type', /application\/json/)
+    done()
   })
 
-  test('should be two boards in DB', async () => {
+  test('should be two boards in DB', async done => {
     const response = await api.get('/api/boards')
 
     expect(response.body.length).toEqual(mockBoards.length)
+    done()
   })
 
-  test('should view a specific board', async () => {
+  test('should view a specific board', async done => {
     const boards = await boardsInDB()
 
     const firstBoard = boards[0]
@@ -196,9 +207,10 @@ describe('CRUD BOARD', () => {
       .expect('Content-Type', /application\/json/)
 
     expect(resultBoard.body).toEqual(firstBoard)
+    done()
   })
 
-  test('should be able to add a board', async () => {
+  test('should be able to add a board', async done => {
     const boardsBeforeRequest = await boardsInDB()
 
     const newUser = {
@@ -236,9 +248,10 @@ describe('CRUD BOARD', () => {
 
     const boardnames = boardsAfterRequest.map(n => n.name)
     expect(boardnames).toContain('newBoard')
+    done()
   })
 
-  test('should not be able to update board if not in hits users array', async () => {
+  test('should not be able to update board if not in hits users array', async done => {
     const boardsBeforeRequest = await boardsInDB()
 
     const newUser = {
@@ -265,9 +278,10 @@ describe('CRUD BOARD', () => {
       .set('Authorization', 'Bearer ' + res.body.token)
       .send(updatedBoard)
       .expect(401)
+    done()
   })
 
-  test('should be able to delete a board', async () => {
+  test('should be able to delete a board', async done => {
     const boardsBeforeRequest = await boardsInDB()
     const boardToDelete = boardsBeforeRequest[0]
 
@@ -284,6 +298,7 @@ describe('CRUD BOARD', () => {
     const names = boardsAfterRequest.map(r => r.name)
 
     expect(names).not.toContain(boardToDelete.name)
+    done()
   })
 })
 
