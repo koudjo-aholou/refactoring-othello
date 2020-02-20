@@ -176,7 +176,11 @@ const Board = ({ board, socket }) => {
       {message ? displayMessage(message) : null}
 
       <article className="reversi-board">
-        <button onClick={() => handleReset()}>Remettre à Zéro</button>
+        <button
+          onClick={() => handleReset()}
+        >
+          Remettre à Zéro
+        </button>
         {displayBoard()}
         <div className="player-names">
           <p>
@@ -186,16 +190,45 @@ const Board = ({ board, socket }) => {
             {users[0] ? <>{users[0].username}<svg className="bi bi-circle-fill online-player" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <circle cx="10" cy="10" r="8"></circle>
             </svg></> : 'En attende du joueur'}</p>
-          <button onClick={() => handlePass()} >Passer le tour</button>
+          <button
+            onClick={() => handlePass()}
+          >
+            Passer le tour
+          </button>
           <p>
-            <svg className="bi bi-circle-fill white-player" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <svg
+              className="bi bi-circle-fill white-player"
+              width="1em"
+              height="1em"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+            >
               <circle cx="10" cy="10" r="8"></circle>
             </svg>
-            {users[1] ? <>{users[1].username}<svg className="bi bi-circle-fill online-player" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="10" cy="10" r="8"></circle>
-            </svg></> : <>{'En attende du joueur'}<svg className="bi bi-circle-fill offline-player" width="1em" height="1em" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="10" cy="10" r="8"></circle>
-            </svg></>}</p>
+            {users[1] ? <>{users[1].username}
+              <svg
+                className="bi bi-circle-fill online-player"
+                width="1em"
+                height="1em"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="10" cy="10" r="8"></circle>
+              </svg>
+            </> : <>{'En attende du joueur'}
+              <svg
+                className="bi bi-circle-fill offline-player"
+                width="1em"
+                height="1em"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle cx="10" cy="10" r="8"></circle>
+              </svg></>}
+          </p>
         </div>
 
       </article>
@@ -205,7 +238,8 @@ const Board = ({ board, socket }) => {
 
 Board.propTypes = {
   board: PropTypes.object,
-  socket: PropTypes.object
+  socket: PropTypes.object,
+  Tile: PropTypes.element
 }
 
 export default Board

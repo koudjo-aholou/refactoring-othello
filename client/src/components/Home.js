@@ -50,37 +50,75 @@ const Home = ({
   const activeBoards = () => {
     const activeBoards = allBoards.filter(board => board.active)
     return (activeBoards.map(board => (
-      <div className="active-game" key={board.id} ><div>
-        <div><span className="fat">Nom</span>: {board.name}</div>
-        <div><span className="fat">Créateur</span>: {board.users ? board.users[0].username : null} </div>
-        <div><span className="fat">Score</span> : {board.blackscore + board.whitescore ? `Score noir ${board.blackscore} VS Score blanc ${board.whitescore}` : 'Pas encore joué'}</div>
-        <div><span className="fat">État</span> : { board && board.users[1] ? 'Partie pleine' : 'Place disponible'}</div>
+      <div className="active-game" key={board.id}>
+        <div>
+          <div>
+            <span className="fat">
+              Nom
+            </span>: {board.name}
+          </div>
+          <div>
+            <span className="fat">
+              Créateur
+            </span>: {board.users ? board.users[0].username : null}
+          </div>
+          <div>
+            <span className="fat">
+              Score
+            </span> : {board.blackscore + board.whitescore ? `Score noir ${board.blackscore} VS Score blanc ${board.whitescore}` : 'Pas encore joué'}
+          </div>
+          <div>
+            <span className="fat">
+              État
+            </span> : { board && board.users[1] ? 'Partie pleine' : 'Place disponible'}
+          </div>
+        </div>
+        {board && board.users[1] && !board.users.find(user => user.id === loggedUser.id)
+          ? <button onClick={() => handleJoinGame(board.id)} className="btn btn-secondary">Regarder la partie</button>
+          : <button onClick={() => handleJoinGame(board.id)} className="btn btn-secondary">Rejoindre la partie</button>}
       </div>
-      {board && board.users[1] && !board.users.find(user => user.id === loggedUser.id)
-        ? <button onClick={() => handleJoinGame(board.id)} className="btn btn-secondary">Regarder la partie</button>
-        : <button onClick={() => handleJoinGame(board.id)} className="btn btn-secondary">Rejoindre la partie</button>}
-
-      </div>)))
+    )))
   }
 
   if (loggedUser) {
     return (
       <main className="main-home">
-        <h1 role="welcome">Bienvenue {loggedUser.username} !</h1>
+        <h1 role="welcome">
+          Bienvenue {loggedUser.username} !
+        </h1>
         <div className="form-group">
-
-          <input type="text" placeholder="Nom de la partie" onChange={changeBoardName} className="form-control"></input>
-          <button onClick={() => handleGameCreation()} className="btn btn-secondary">Créer une partie</button>
-          <button className="btn btn-danger" onClick={disconnect}>Se déconnecter</button>
+          <input
+            type="text"
+            placeholder="Nom de la partie"
+            onChange={changeBoardName}
+            className="form-control"
+          >
+          </input>
+          <button
+            onClick={() => handleGameCreation()}
+            className="btn btn-secondary"
+          >
+            Créer une partie
+          </button>
+          <button
+            className="btn btn-danger"
+            onClick={disconnect}
+          >
+            Se déconnecter
+          </button>
         </div>
-        <h3>Parties en cours</h3>
+        <h3>
+          Parties en cours
+        </h3>
         {activeBoards()}
       </main>
     )
   } else {
     return (
       <main className="main-home">
-        <h1>React Reversi Game</h1>
+        <h1>
+          React Reversi Game
+        </h1>
         {registerForm()}
         {loginForm()}
       </main>
