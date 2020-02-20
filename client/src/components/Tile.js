@@ -5,14 +5,23 @@ const Tile = props => {
   if (props.state === 'playable') {
     return (
       <div className="reversi-tile">
-        <div className={props.state} name={props.name} onClick={() => props.handlePlayTurn(props.rowIndex, props.columnIndex)}>
-
-        </div></div>)
+        <div
+          className={props.state}
+          name={props.name}
+          onClick={() => props.handlePlayTurn(props.rowIndex, props.columnIndex)}
+        >
+        </div>
+      </div>
+    )
   }
 
   return (
     <div className="reversi-tile">
-      <div className={props.state} name={props.name} ></div>
+      <div
+        className={props.state}
+        name={props.name}
+      >
+      </div>
     </div>
   )
 }
