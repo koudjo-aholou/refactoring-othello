@@ -6,7 +6,7 @@ const tile = {
 const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 const index = [0, 1, 2, 3, 4, 5, 6, 7]
 
-const createBoard = () => index.map(row => index.map(column => {
+export const createBoard = () => index.map(row => index.map(column => {
   return { ...tile, rowIndex: row, columnIndex: column, name: letters[row] + (column + 1) }
 }))
 
