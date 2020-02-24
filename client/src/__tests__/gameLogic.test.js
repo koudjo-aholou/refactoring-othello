@@ -27,5 +27,11 @@ describe('Game Logic', () => {
       expect(Board[4][4].state).toBe('white')
       expect(checkEmpty).toBe(false)
     })
+
+    // filterTiles
+    // isPlayable
+    // playableTiles
+    // resetPlayable
+    // makeMove
   })
 })
